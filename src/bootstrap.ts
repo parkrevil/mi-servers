@@ -1,4 +1,5 @@
 import compression from '@fastify/compress';
+import fastifyHelmet from '@fastify/helmet';
 import { ValidationError, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
@@ -48,6 +49,7 @@ export const bootstrap = async () => {
 
   await app.register(compression);
   app.enableCors(serverConfig.cors);
+  await app.register(fastifyHelmet);
 
   if (isLocal()) {
     const apiDoc = new DocumentBuilder()
