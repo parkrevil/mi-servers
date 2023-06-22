@@ -11,7 +11,11 @@ services:
       - ./.container-volumes/mongodb/data/db:/data/db
     environment:
       MYSQL_ROOT_PASSWORD: 1234
-      MYSQL_DATABASE: revildev
+      MYSQL_HOST: localhost
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: mi
+      MYSQL_USER: revil
+      MYSQL_PASSWORD: 1234
       TZ: Asia/Seoul
     command:
       - --default-authentication-plugin=mysql_native_password
