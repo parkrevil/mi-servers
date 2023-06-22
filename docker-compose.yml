@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  mi_mysql:
+    container_name: mi_mysql
+    image: mysql
+    restart: always
+    ports:
+      - 3336:3306
+    volumes:
+      - ./.container-volumes/mongodb/data/db:/data/db
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: revildev
+      TZ: Asia/Seoul
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
+
+  mi_redis:
+    container_name: mi_redis
+    image: redis
+    restart: always
+    ports:
+      - 6800:6379
+    volumes:
+      - ./.container-volumes/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
