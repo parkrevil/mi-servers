@@ -4,8 +4,9 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { LoggerModule } from 'nestjs-pino';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
+import { AuthModule } from './auth/auth.module';
 import { configs } from './core/configs';
-import { isLocal, isProduction } from './core/helpers';
+import { isLocal } from './core/helpers';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -33,6 +34,7 @@ import { UserModule } from './user/user.module';
       inject: [ConfigService],
     }),
     UserModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

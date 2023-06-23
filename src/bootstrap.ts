@@ -1,6 +1,6 @@
 import compression from '@fastify/compress';
 import fastifyHelmet from '@fastify/helmet';
-import { ValidationError, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import {
@@ -39,7 +39,7 @@ export const bootstrap = async () => {
       },
       forbidUnknownValues: true,
       stopAtFirstError: true,
-      exceptionFactory: (errors: ValidationError[]) => {
+      exceptionFactory: () => {
         return new ValidationException();
       },
     }),
