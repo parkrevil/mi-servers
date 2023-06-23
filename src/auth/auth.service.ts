@@ -38,7 +38,7 @@ export class AuthService {
 
     const payload: JwtPayload = { id: user.id };
     const [accessToken, refreshToken] = await Promise.all([
-      this.jwtService.signAsync(payload, { expiresIn: '10s' }),
+      this.jwtService.signAsync(payload),
       cryptoRandomString({ type: 'ascii-printable', length: 64 }),
     ]);
 
