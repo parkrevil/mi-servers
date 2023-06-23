@@ -1,19 +1,25 @@
 import { Body, Controller, Delete, Post } from '@nestjs/common';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiForbiddenResponse, ApiTags } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
 import { LoginDto } from './dtos';
 import { InvalidAccountException } from './exceptions';
 import { LoginRo } from './ros';
+import { toApiExceptions } from '@/core/helpers';
+import { Public } from '@/core/decorators/public';
 
 @ApiTags('인증')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @Public()
   @Post('login')
   @ApiCreatedResponse({
     type: LoginRo,
+  })
+  @ApiForbiddenResponse({
+    description: toApiExceptions(InvalidAccountException),
   })
   async login(@Body() body: LoginDto): Promise<LoginRo> {
     const tokens = await this.authService.login(body);
@@ -22,7 +28,7 @@ export class AuthController {
       throw new InvalidAccountException();
     }
 
-    return tokens;
+    return new LoginRo(tokens);
   }
 
   @Delete('logout')

@@ -6,4 +6,8 @@ export class LoginRo implements Pick<JwtTokens, 'accessToken'> {
     description: 'JWT Access Token(in Header - Authorization: Bearer xxx)',
   })
   accessToken: string;
+
+  constructor(tokens: JwtTokens) {
+    this.accessToken = tokens.accessToken;
+  }
 }

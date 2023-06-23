@@ -50,4 +50,10 @@ export class User {
     transformer: new DateTimeTypeTransformer(),
   })
   updatedAt: DateTime;
+
+  constructor(params?: Omit<User, 'id' | 'createdAt' | 'updatedAt'>) {
+    if (params) {
+      Object.assign(this, params);
+    }
+  }
 }

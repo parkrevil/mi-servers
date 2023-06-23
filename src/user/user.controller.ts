@@ -20,12 +20,14 @@ import { toApiExceptions } from '@/core/helpers';
 import { CreateUserDto, HasUsernameQuery } from './dtos';
 import { UsernameAlreadyExistsException } from './exceptions';
 import { UserService } from './user.service';
+import { Public } from '@/core/decorators/public';
 
 @ApiTags('사용자')
 @Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
 
+  @Public()
   @Head()
   @ApiOperation({ summary: '사용자 아이디 존재여부 확인' })
   @ApiOkResponse({
@@ -40,6 +42,7 @@ export class UserController {
     }
   }
 
+  @Public()
   @Post()
   @ApiOperation({ summary: '사용자 생성' })
   @ApiCreatedResponse({

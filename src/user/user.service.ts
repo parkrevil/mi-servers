@@ -35,12 +35,15 @@ export class UserService {
   }
 
   async create(params: CreateUserDto): Promise<User> {
-    const user = new User();
-    user.username = params.username;
-    user.password = await this.encryptPassword(params.password);
-    user.nickname = params.nickname;
+    params.password = await this.encryptPassword(params.password);
+    
+    const user = new User(params);
 
     return this.userRepo.save(user);
+  }
+
+  findOne(id: number): Promise<User> {
+    return this.userRepo.findOneBy({ id });
   }
 
   findOneByUsername(username: string): Promise<User> {
