@@ -7,6 +7,7 @@ import { UserService } from '@/user/user.service';
 
 import { LoginDto } from './dtos';
 import { JwtPayload, JwtTokens } from './interfaces';
+import { cryptoRandomString } from '@/core/helpers';
 
 @Injectable()
 export class AuthService {
@@ -38,7 +39,7 @@ export class AuthService {
     const payload: JwtPayload = { id: user.id };
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, { expiresIn: '10s' }),
-      this.jwtService.signAsync(payload, { expiresIn: '1m' }),
+      cryptoRandomString({ type: 'ascii-printable', length: 64 }),
     ]);
 
     return {
