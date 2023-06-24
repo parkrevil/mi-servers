@@ -3,20 +3,20 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  ManyToOne,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { DateTimeTypeTransformer } from '@/core/providers/typeorm/transformers';
-import { Device } from '@/device/device.entity';
+import { User } from '@/user/user.entity';
 
 @Entity({
-  name: 'user',
+  name: 'device',
 })
-@Unique(['username'])
-export class User {
+export class Device {
   @PrimaryGeneratedColumn({
     unsigned: true,
     comment: 'PK',
@@ -24,22 +24,16 @@ export class User {
   id: number;
 
   @Column({
-    length: 512,
-    comment: '아이디(이메일)',
+    unsigned: true,
+    comment: '사용자 PK',
   })
-  username: string;
+  userId: number;
 
   @Column({
-    length: 1024,
-    comment: '비밀번호',
+    length: 32,
+    comment: '이름',
   })
-  password: string;
-
-  @Column({
-    length: 64,
-    comment: '닉네임',
-  })
-  nickname: string;
+  name: string;
 
   @CreateDateColumn({
     comment: '생성일시',

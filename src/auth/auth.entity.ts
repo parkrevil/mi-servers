@@ -3,43 +3,36 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { DateTimeTypeTransformer } from '@/core/providers/typeorm/transformers';
-import { Device } from '@/device/device.entity';
 
 @Entity({
-  name: 'user',
+  name: 'auth',
 })
-@Unique(['username'])
-export class User {
-  @PrimaryGeneratedColumn({
+@Unique(['refreshToken'])
+export class Auth {
+  @PrimaryColumn({
     unsigned: true,
-    comment: 'PK',
+    comment: '사용자 PK',
   })
-  id: number;
+  userId: number;
+
+  @PrimaryColumn({
+    unsigned: true,
+    comment: '기기 PK',
+  })
+  deviceId: number;
 
   @Column({
-    length: 512,
-    comment: '아이디(이메일)',
-  })
-  username: string;
-
-  @Column({
-    length: 1024,
-    comment: '비밀번호',
-  })
-  password: string;
-
-  @Column({
+    type: 'char',
     length: 64,
-    comment: '닉네임',
+    comment: 'Refresh Token',
   })
-  nickname: string;
+  refreshToken: string;
 
   @CreateDateColumn({
     comment: '생성일시',
@@ -53,7 +46,7 @@ export class User {
   })
   updatedAt: DateTime;
 
-  constructor(params?: Omit<User, 'id' | 'createdAt' | 'updatedAt'>) {
+  constructor(params?: Omit<Auth, 'createdAt' | 'updatedAt'>) {
     if (params) {
       Object.assign(this, params);
     }

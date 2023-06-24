@@ -10,6 +10,7 @@ import { configs } from './core/configs';
 import { AuthGuard } from './core/guards/auth';
 import { isLocal } from './core/helpers';
 import { UserModule } from './user/user.module';
+import { DeviceModule } from './device/device.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { UserModule } from './user/user.module';
     }),
     UserModule,
     AuthModule,
+    DeviceModule,
   ],
   controllers: [],
   providers: [
