@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Head,
-  NotFoundException,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Head, NotFoundException, Post, Query } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -15,7 +8,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { Public } from '@/core/decorators/public';
+import { Public } from '@/core/decorators';
 import { toApiExceptions } from '@/core/helpers';
 
 import { CreateUserDto, HasUsernameQuery } from './dtos';

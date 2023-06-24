@@ -1,16 +1,7 @@
 import { DateTime } from 'luxon';
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  Unique,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
 
 import { DateTimeTypeTransformer } from '@/core/providers/typeorm/transformers';
-import { Device } from '@/device/device.entity';
 
 @Entity({
   name: 'user',

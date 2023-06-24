@@ -1,4 +1,5 @@
 import { registerAs } from '@nestjs/config';
+import * as ms from 'ms';
 
 import { AppConfig } from './interfaces';
 
@@ -14,6 +15,10 @@ export default registerAs(
         issuer: process.env.JWT_ISSUER,
         expiresIn: process.env.JWT_EXPIRES_IN,
       },
+    },
+    refreshToken: {
+      ttl: ms(process.env.REFRESH_TOKEN_TTL),
+      updateTerm: ms(process.env.REFRESH_TOKEN_UPDATE_TERM),
     },
   }),
 );

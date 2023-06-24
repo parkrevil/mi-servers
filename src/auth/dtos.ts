@@ -1,5 +1,7 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString } from 'class-validator';
+import { ApiProperty, PickType } from '@nestjs/swagger';
+import { IsEmail, IsString, IsUUID, Length } from 'class-validator';
+
+import { AuthTokensRo } from './ros';
 
 export class LoginDto {
   @ApiProperty({
@@ -14,4 +16,9 @@ export class LoginDto {
   })
   @IsString()
   password: string;
+}
+
+export class RefreshAccessTokenDto extends PickType(AuthTokensRo, ['refreshToken']) {
+  @IsUUID('4')
+  refreshToken: string;
 }

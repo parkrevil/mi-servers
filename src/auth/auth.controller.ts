@@ -1,17 +1,19 @@
-import { Body, Controller, Delete, Post } from '@nestjs/common';
-import {
-  ApiCreatedResponse,
-  ApiForbiddenResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { Body, Controller, Delete, Post, UnauthorizedException } from '@nestjs/common';
+import { ApiCreatedResponse, ApiForbiddenResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { Public } from '@/core/decorators/public';
+import { CurrentUser, Public } from '@/core/decorators';
 import { toApiExceptions } from '@/core/helpers';
+import { User } from '@/user/user.entity';
 
 import { AuthService } from './auth.service';
-import { LoginDto } from './dtos';
-import { InvalidAccountException } from './exceptions';
-import { LoginRo } from './ros';
+import { LoginDto, RefreshAccessTokenDto } from './dtos';
+import {
+  InvalidAccountException,
+  InvalidPasswordException,
+  RefreshTokenExpiredException,
+  UserNotFoundException,
+} from './exceptions';
+import { AuthTokensRo } from './ros';
 
 @ApiTags('인증')
 @Controller('auth')
@@ -20,24 +22,61 @@ export class AuthController {
 
   @Public()
   @Post('login')
+  @ApiOperation({
+    summary: '로그인',
+  })
   @ApiCreatedResponse({
-    type: LoginRo,
+    type: AuthTokensRo,
   })
   @ApiForbiddenResponse({
     description: toApiExceptions(InvalidAccountException),
   })
-  async login(@Body() body: LoginDto): Promise<LoginRo> {
-    const tokens = await this.authService.login(body);
+  async login(@Body() body: LoginDto): Promise<AuthTokensRo> {
+    try {
+      const tokens = await this.authService.login(body);
 
-    if (!tokens) {
-      throw new InvalidAccountException();
+      return new AuthTokensRo(tokens);
+    } catch (e) {
+      switch (e.constructor) {
+        case UserNotFoundException:
+        case InvalidPasswordException:
+          throw new InvalidAccountException();
+
+        default:
+          throw e;
+      }
     }
-
-    return new LoginRo(tokens);
   }
 
   @Delete('logout')
   logout(): void {
     //
+  }
+
+  @Public()
+  @Post('access-token')
+  @ApiOperation({
+    summary: 'AccessToken 갱신',
+  })
+  @ApiCreatedResponse({
+    type: AuthTokensRo,
+  })
+  @ApiForbiddenResponse({
+    description: toApiExceptions(InvalidAccountException),
+  })
+  async refreshAccessToken(@Body() body: RefreshAccessTokenDto): Promise<AuthTokensRo> {
+    try {
+      const tokens = await this.authService.refreshAccessToken(body.refreshToken);
+
+      return new AuthTokensRo(tokens);
+    } catch (e) {
+      switch (e.constructor) {
+        case RefreshTokenExpiredException:
+          throw new UnauthorizedException();
+
+        default:
+          throw e;
+      }
+    }
   }
 }

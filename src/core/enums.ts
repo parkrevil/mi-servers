@@ -3,3 +3,8 @@ export enum Env {
   Development = 'development',
   Production = 'production',
 }
+
+export enum InjectTokens {
+  RedisAuthClient = 'auth',
+  RedisCacheClient = 'cache',
+}
