@@ -22,3 +22,4 @@ export class RefreshAccessTokenDto extends PickType(AuthTokensRo, ['refreshToken
   @IsUUID('4')
   refreshToken: string;
 }
+export class LogoutDto extends RefreshAccessTokenDto {}

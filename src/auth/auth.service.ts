@@ -55,6 +55,10 @@ export class AuthService {
     };
   }
 
+  async logout(refreshToken: string): Promise<void> {
+    await this.deleteRefreshToken(refreshToken);
+  }
+
   async refreshAccessToken(oldRefreshToken: string): Promise<JwtTokens> {
     let refreshToken = oldRefreshToken;
     const payload = await this.getRefreshToken(oldRefreshToken);
@@ -72,7 +76,7 @@ export class AuthService {
     if (payload.updateAt <= DateTime.local()) {
       refreshToken = this.generateRefreshToken();
 
-      await Promise.all([this.redis.del(oldRefreshToken), this.setRefreshToken(user, refreshToken)]);
+      await Promise.all([this.deleteRefreshToken(oldRefreshToken), this.setRefreshToken(user, refreshToken)]);
     }
 
     const accessToken = await this.generateAccessToken(user);
@@ -114,5 +118,9 @@ export class AuthService {
     res.updateAt = DateTime.fromISO(res.updateAt);
 
     return res;
+  }
+
+  private async deleteRefreshToken(refreshToken: string): Promise<void> {
+    await this.redis.del(refreshToken);
   }
 }

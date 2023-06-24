@@ -1,12 +1,20 @@
 import { Body, Controller, Delete, Post, UnauthorizedException } from '@nestjs/common';
-import { ApiCreatedResponse, ApiForbiddenResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiForbiddenResponse,
+  ApiNoContentResponse,
+  ApiOperation,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
 import { CurrentUser, Public } from '@/core/decorators';
 import { toApiExceptions } from '@/core/helpers';
 import { User } from '@/user/user.entity';
 
 import { AuthService } from './auth.service';
-import { LoginDto, RefreshAccessTokenDto } from './dtos';
+import { LoginDto, LogoutDto, RefreshAccessTokenDto } from './dtos';
 import {
   InvalidAccountException,
   InvalidPasswordException,
@@ -49,20 +57,25 @@ export class AuthController {
   }
 
   @Delete('logout')
-  logout(): void {
-    //
+  @ApiOperation({
+    summary: '로그아웃',
+  })
+  @ApiBearerAuth()
+  @ApiNoContentResponse()
+  logout(@Body() body: LogoutDto): void {
+    this.authService.logout(body.refreshToken);
   }
 
   @Public()
-  @Post('access-token')
+  @Post('access-tokens')
   @ApiOperation({
     summary: 'AccessToken 갱신',
   })
   @ApiCreatedResponse({
     type: AuthTokensRo,
   })
-  @ApiForbiddenResponse({
-    description: toApiExceptions(InvalidAccountException),
+  @ApiUnauthorizedResponse({
+    description: toApiExceptions(UnauthorizedException),
   })
   async refreshAccessToken(@Body() body: RefreshAccessTokenDto): Promise<AuthTokensRo> {
     try {
@@ -72,6 +85,7 @@ export class AuthController {
     } catch (e) {
       switch (e.constructor) {
         case RefreshTokenExpiredException:
+        case UserNotFoundException:
           throw new UnauthorizedException();
 
         default:
