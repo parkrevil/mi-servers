@@ -1,16 +1,15 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { LoggerModule } from 'nestjs-pino';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 import { AuthModule } from './auth/auth.module';
-import { AppConfig, configs } from './core/configs';
+import { configs } from './core/configs';
+import { AuthGuard } from './core/guards/auth';
 import { isLocal } from './core/helpers';
 import { UserModule } from './user/user.module';
-import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from './core/guards/auth';
-import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [

@@ -3,11 +3,11 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 
 import { AppConfig } from '@/core/configs';
+import { cryptoRandomString } from '@/core/helpers';
 import { UserService } from '@/user/user.service';
 
 import { LoginDto } from './dtos';
 import { JwtPayload, JwtTokens } from './interfaces';
-import { cryptoRandomString } from '@/core/helpers';
 
 @Injectable()
 export class AuthService {

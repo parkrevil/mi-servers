@@ -15,12 +15,12 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
+import { Public } from '@/core/decorators/public';
 import { toApiExceptions } from '@/core/helpers';
 
 import { CreateUserDto, HasUsernameQuery } from './dtos';
 import { UsernameAlreadyExistsException } from './exceptions';
 import { UserService } from './user.service';
-import { Public } from '@/core/decorators/public';
 
 @ApiTags('사용자')
 @Controller('users')

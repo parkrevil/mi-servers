@@ -8,4 +8,4 @@ export const cryptoRandomString = async (options: any) => {
   const module = await (eval(`import('crypto-random-string')`) as Promise<any>);
 
   return module.cryptoRandomStringAsync(options);
-}
+};
